@@ -1,11 +1,28 @@
 # What?
 
+This repo contains universal drop in GitHub CI scripts and issue templates. After a small modifications (specific to your project) you will end with "must-have" CI checks for commits/PRs and nice bug/feature request templates.
+
+> **Note**
+> 
+> I recommend you this basement for every V project, that will be stored on GiHub.
+
+## Details
+
+### `new-changes-validation` GitHub Actions workflow
+
+#### Triggers
+
+- push (on main branch)
+- pull request
+
+#### Flow
+
 ```mermaid
 graph TD
 	autofree_node[autofree]
 	skip_unused_node[skip-unused]
 
-	subgraph Simple_build_step[Simple build step]
+	subgraph Simple_build_step[Simple build]
 		autofree_node
 		skip_unused_node
 	end
@@ -16,7 +33,7 @@ graph TD
 	gcc_node[GCC]
 	clang_node[Clang]
 
-	subgraph Different_compilers_step[Different compilers step]
+	subgraph Different_compilers_step[Different compilers]
 		autofree_node_1
 		skip_unused_node_1
 		prod_node
@@ -24,7 +41,7 @@ graph TD
 		clang_node
 	end
 
-	subgraph Cross_compilation_step[Cross compilation step]
+	subgraph Cross_compilation_step[Cross compilation]
     subgraph Compile_from_system[Compiles from]
       direction LR
 		  linux_base[Linux]
@@ -50,9 +67,9 @@ graph TD
 	end
 
 	style parallel_exec1 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
-  style parallel_exec2 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
-  style parallel_exec3 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
-  style parallel_exec4 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
+	style parallel_exec2 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
+	style parallel_exec3 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
+	style parallel_exec4 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
   
 	style all_success1 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 	style all_success2 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
@@ -60,16 +77,26 @@ graph TD
 	style all_success4 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 
 	start_node((Start)) 
-  --> Simple_build_step
-  --> tests_node[Tests]
+	--> Simple_build_step
+	--> tests_node[Tests]
 	--> Different_compilers_step
-	--> parallel_exec1{{Parallel execution}} --> clang_sanitizers_node[Clang sanitizers] & gcc_sanitizers_node[GCC sanitizers] & valgrind_node[Valgrind] --> all_success1{{All success}}
-	--> fuzzer_node[Fuzzer]
+	--> parallel_exec1{{Parallel execution}} --> clang_sanitizers_node[Clang sanitizers checks] & gcc_sanitizers_node[GCC sanitizers checks] & valgrind_node[Valgrind checks] --> all_success1{{All success}}
+	--> fuzzer_node[Fuzzer testing]
 	--> parallel_exec2{{Parallel execution}} --> Cross_compilation_step & Vab_compilation_node[Vab compilation] --> all_success2{{All success}}
-	--> parallel_exec3{{Parallel execution}} --> format_node[Format] & documentation_node[Documentation] & vet_node[Vet check] --> all_success3{{All success}}
+	--> parallel_exec3{{Parallel execution}} --> format_node[Format check] & documentation_node[Documentation check] & vet_node[Vet check] --> all_success3{{All success}}
 	--> parallel_exec4{{Parallel execution}} --> performance_regression_node[Performance regression check] & memory_regression_node[Memory regression check] --> all_success4{{All success}}
 	--> end_node((End))
 ```
+
+### Issue templates
+
+#### `Bug` issue template
+
+![Bug issue template example](https://user-images.githubusercontent.com/36485221/219885209-8343f5cf-fbab-428f-8090-f7b1979a5c62.png)
+
+#### `Feature request` issue template
+
+![Feature request issue template example](https://user-images.githubusercontent.com/36485221/219885262-3f770c2b-a51a-4c95-8954-43ff97fc792d.png)
 
 # How?
 
