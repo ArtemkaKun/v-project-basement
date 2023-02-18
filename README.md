@@ -4,7 +4,7 @@ This repo contains universal drop in GitHub CI scripts and issue templates. Afte
 
 > **Note**
 > 
-> I recommend you this basement for every V project, that will be stored on GiHub.
+> I recommend use this basement for every V project, that will be stored on GiHub.
 
 ## Details
 
