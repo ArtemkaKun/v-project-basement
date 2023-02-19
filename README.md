@@ -123,3 +123,8 @@ I decided to make a checking process sequential because of 2 reasons:
 
 1. Make a developer focus on the right thing to fix. It will be at least strange to fix code format and write documentation when your code doesn't compile. Steps that should run in parallel - run in parallel.
 2. Don't load runners with unneeded work. Don't sanitize your code if it doesn't compile, so your runner can do something more valuable (maybe checking another project). This is not that clear when you use free GitHub runners, but it's very clear when you have limited self-hosted runners.
+
+# Thanks
+
+- V community - for cool programming language and CI scripts
+- @ulises-jeremias for issue templates
