@@ -1,18 +1,25 @@
 # What?
 
-This repo contains universal drop in GitHub CI scripts and issue templates. After a small modifications (specific to your project) you will end with "must-have" CI checks for commits/PRs and nice bug/feature request templates.
+This repo contains universal minimum GitHub CI scripts and issue templates. After small modifications (specific to your project) you will end with "must-have" CI checks for commits/PRs and nice bug/feature request templates. You can spend no time on DevOps stuff and can rush directly into the development process.
 
 > **Note**
 > 
-> I recommend use this basement for every V project, that will be stored on GiHub.
+> I recommend using this basement for every V project, that will be stored on GitHub.
 
 ## Details
 
 ### `new-changes-validation` GitHub Actions workflow
 
+The idea of this workflow is very simple - validate incoming changes, so you make sure that changes, you are about to push to the main branch, work.
+The philosophy of the workflow is also simple:
+
+1. Code works
+2. Code beautiful
+3. Code fast
+
 #### Triggers
 
-- push (on main branch)
+- push (on the main branch)
 - pull request
 
 #### Flow
@@ -100,4 +107,19 @@ graph TD
 
 # How?
 
+## How to use it in my project?
+
+Just copy-paste the `.github` folder to your V project.
+
 # Why?
+
+## Why does one need to use this basement?
+
+It will help to improve the quality of your code and development process for any V project. To decide if you need to use this basement, ask yourself a question "Is my project benefits from automatic compilation, memory leaks, and clean code checks?"
+
+## Why GitHub Action jobs in `new-changes-validation` are not parallel?
+
+I decided to make a checking process sequential because of 2 reasons:
+
+1. Make a developer focus on the right thing to fix. It will be at least strange to fix code format and write documentation when your code doesn't compile. Steps that should run in parallel - run in parallel.
+2. Don't load runners with unneeded work. Don't sanitize your code if it doesn't compile, so your runner can do something more valuable (maybe checking another project). This is not that clear when you use free GitHub runners, but it's very clear when you have limited self-hosted runners.
