@@ -1,6 +1,6 @@
 # What?
 
-This repo contains universal minimum GitHub CI scripts and issue templates. After small modifications (specific to your project) you will end with "must-have" CI checks for commits/PRs and nice bug/feature request templates. You can spend no time on DevOps stuff and can rush directly into the development process.
+This repo contains universal minimum GitHub CI scripts and issue templates for V project. After small modifications (specific to your project) you end up with "must-have" CI checks for commits/PRs and nice bug/feature request templates. You will spend no time on DevOps stuff and rush directly into the development process.
 
 > **Note**
 > 
@@ -115,7 +115,7 @@ Just copy-paste the `.github` folder to your V project.
 
 ## Why does one need to use this basement?
 
-It will help to improve the quality of your code and development process for any V project. To decide if you need to use this basement, ask yourself a question "Is my project benefits from automatic compilation, memory leaks, and clean code checks?"
+It will help to improve the quality of your code and development process for any V project. To decide if you need to use this basement, ask yourself this question "Would my project benefit from automatic compilation, no memory leaks, and clean code checks?"
 
 ## Why GitHub Action jobs in `new-changes-validation` are not parallel?
 
