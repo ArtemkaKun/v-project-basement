@@ -1,0 +1,28 @@
+name: New changes validation
+
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+
+jobs:
+  simple-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        trimming: [ null , -skip-unused ]
+        memory-management: [ null , -autofree ]
+    steps:
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          check-latest: true
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: ${{ matrix.trimming }} ${{ matrix.memory-management }} build
+        run: v ${{ matrix.trimming }} ${{ matrix.memory-management }} .
