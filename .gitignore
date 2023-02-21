@@ -1,0 +1,16 @@
+act-run-script
+
+# Binaries for programs and plugins
+main
+v-project-basement
+*.exe
+*.exe~
+*.so
+*.dylib
+*.dll
+
+# Ignore common editor/system specific metadata
+.DS_Store
+.idea/
+.vscode/
+*.iml
