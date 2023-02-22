@@ -18,7 +18,7 @@ jobs:
         id: cache-vlang
         uses: actions/cache@v3
         with:
-          path: ./vlang
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
       - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
@@ -41,7 +41,7 @@ jobs:
         id: cache-vlang
         uses: actions/cache@v3
         with:
-          path: ./vlang
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
       - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
@@ -70,7 +70,7 @@ jobs:
         id: cache-vlang
         uses: actions/cache@v3
         with:
-          path: ./vlang
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
       - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
@@ -88,7 +88,7 @@ jobs:
         id: cache-llvm
         uses: actions/cache@v3
         with:
-          path: ./llvm
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
           key: llvm-15
 
       - name: Install LLVM and Clang
@@ -114,7 +114,7 @@ jobs:
         id: cache-vlang
         uses: actions/cache@v3
         with:
-          path: ./vlang
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
       - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
@@ -127,7 +127,7 @@ jobs:
         id: cache-llvm
         uses: actions/cache@v3
         with:
-          path: ./llvm
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
           key: llvm-15
 
       - name: Install LLVM and Clang
