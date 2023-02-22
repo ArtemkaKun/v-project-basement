@@ -7,31 +7,48 @@ on:
   pull_request:
 
 jobs:
+  cache-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Cache Vlang
+        uses: actions/cache/save@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: '15'
+
+      - name: Cache LLVM and Clang
+        uses: actions/cache/save@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          key: llvm-15
+
   simple-build:
+    needs: cache-dependencies
     runs-on: ubuntu-latest
     strategy:
       matrix:
         trimming: [ null , -skip-unused ]
         memory-management: [ null , -autofree ]
     steps:
-      - name: Cache Vlang
-        id: cache-vlang
-        uses: actions/cache@v3
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
 
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        name: Install V
-        uses: vlang/setup-v@v1.3
-        with:
-          version: 'weekly.2023.08'
-
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
-          key: vlang-0.3.3-weekly.2023.08
+      - name: Set up V
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -43,24 +60,15 @@ jobs:
     needs: simple-build
     runs-on: ubuntu-latest
     steps:
-      - name: Cache Vlang
-        id: cache-vlang
-        uses: actions/cache@v3
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
 
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        name: Install V
-        uses: vlang/setup-v@v1.3
-        with:
-          version: 'weekly.2023.08'
-
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
-          key: vlang-0.3.3-weekly.2023.08
+      - name: Set up V
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -78,48 +86,33 @@ jobs:
         memory-management: [ null , -autofree ]
         optimization: [ null , -prod ]
     steps:
-      - name: Cache Vlang
-        id: cache-vlang
-        uses: actions/cache@v3
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
 
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        name: Install V
-        uses: vlang/setup-v@v1.3
-        with:
-          version: 'weekly.2023.08'
-
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
-          key: vlang-0.3.3-weekly.2023.08
+      - name: Set up V
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
 
       - name: Set up GCC
         run: |
           sudo apt-get update
           sudo apt-get install --quiet -y build-essential
 
-      - name: Cache LLVM and Clang
-        id: cache-llvm
-        uses: actions/cache@v3
+      - name: Restore LLVM and Clang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/llvm
           key: llvm-15
+          fail-on-cache-miss: true
 
-      - name: Install LLVM and Clang
+      - name: Setup LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: '15'
-          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
-
-      - if: ${{ steps.cache-llvm.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
-          key: vlang-0.3.3-weekly.2023.08
+          cached: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -134,43 +127,28 @@ jobs:
       matrix:
         sanitizer: [ address, thread, memory, undefined, leak ]
     steps:
-      - name: Cache Vlang
-        id: cache-vlang
-        uses: actions/cache@v3
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
 
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        name: Install V
-        uses: vlang/setup-v@v1.3
-        with:
-          version: 'weekly.2023.08'
+      - name: Set up V
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
 
-      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
-          key: vlang-0.3.3-weekly.2023.08
-
-      - name: Cache LLVM and Clang
-        id: cache-llvm
-        uses: actions/cache@v3
+      - name: Restore LLVM and Clang
+        uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/llvm
           key: llvm-15
+          fail-on-cache-miss: true
 
-      - name: Install LLVM and Clang
+      - name: Setup LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: '15'
-          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
-
-      - if: ${{ steps.cache-llvm.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
-          key: vlang-0.3.3-weekly.2023.08
+          cached: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
