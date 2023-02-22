@@ -14,10 +14,18 @@ jobs:
         trimming: [ null , -skip-unused ]
         memory-management: [ null , -autofree ]
     steps:
-      - name: Install V
+      - name: Cache Vlang
+        id: cache-vlang
+        uses: actions/cache@v3
+        with:
+          path: ./vlang
+          key: vlang-0.3.3-weekly.2023.08
+
+      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
+        name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          check-latest: true
+          version: 'weekly.2023.08'
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -29,10 +37,18 @@ jobs:
     needs: simple-build
     runs-on: ubuntu-latest
     steps:
-      - name: Install V
+      - name: Cache Vlang
+        id: cache-vlang
+        uses: actions/cache@v3
+        with:
+          path: ./vlang
+          key: vlang-0.3.3-weekly.2023.08
+
+      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
+        name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          check-latest: true
+          version: 'weekly.2023.08'
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -50,23 +66,78 @@ jobs:
         memory-management: [ null , -autofree ]
         optimization: [ null , -prod ]
     steps:
-      - name: Install V
+      - name: Cache Vlang
+        id: cache-vlang
+        uses: actions/cache@v3
+        with:
+          path: ./vlang
+          key: vlang-0.3.3-weekly.2023.08
+
+      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
+        name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          check-latest: true
+          version: 'weekly.2023.08'
 
       - name: Set up GCC
         run: |
           sudo apt-get update
           sudo apt-get install --quiet -y build-essential
 
-      - name: Set up Clang
-        run: |
-          sudo apt-get update
-          sudo apt-get install --quiet -y clang
+      - name: Cache LLVM and Clang
+        id: cache-llvm
+        uses: actions/cache@v3
+        with:
+          path: ./llvm
+          key: llvm-15
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: '15'
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
 
       - name: ${{ matrix.compiler }} ${{ matrix.trimming }} ${{ matrix.optimization }} ${{ matrix.memory-management }} build
         run: v -cc ${{ matrix.compiler }} ${{ matrix.trimming }} ${{ matrix.optimization }} ${{ matrix.memory-management }} .
+
+  clang-sanitizers:
+    needs: different-compilers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizer: [ address, thread, memory, undefined, leak ]
+    steps:
+      - name: Cache Vlang
+        id: cache-vlang
+        uses: actions/cache@v3
+        with:
+          path: ./vlang
+          key: vlang-0.3.3-weekly.2023.08
+
+      - if: ${{ steps.cache-vlang.outputs.cache-hit != 'true' }}
+        name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Cache LLVM and Clang
+        id: cache-llvm
+        uses: actions/cache@v3
+        with:
+          path: ./llvm
+          key: llvm-15
+
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: '15'
+          cached: ${{ steps.cache-llvm.outputs.cache-hit }}
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: Clang ${{ matrix.sanitizer }} sanitizer
+        run: v -cc clang -cflags -fsanitize=${{ matrix.sanitizer }} .
