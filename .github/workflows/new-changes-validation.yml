@@ -48,7 +48,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Set up V
-        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo ./v symlink
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -68,7 +68,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Set up V
-        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo ./v symlink
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -94,7 +94,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Set up V
-        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo ./v symlink
 
       - name: Set up GCC
         run: |
@@ -135,7 +135,7 @@ jobs:
           fail-on-cache-miss: true
 
       - name: Set up V
-        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo v symlink
+        run: cd /home/runner/work/v-project-basement/v-project-basement/vlang/vlang_linux_x64 && sudo ./v symlink
 
       - name: Restore LLVM and Clang
         uses: actions/cache/restore@v3
