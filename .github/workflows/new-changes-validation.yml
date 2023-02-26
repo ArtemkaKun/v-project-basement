@@ -188,3 +188,93 @@ jobs:
 
       - name: Clang ${{ matrix.sanitizer }} sanitizer
         run: v -cc clang -cflags -fsanitize=${{ matrix.sanitizer }} .
+
+  gcc-sanitizers:
+    needs: different-compilers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sanitizer: [ thread, leak ]
+    steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
+
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Set up GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install --quiet -y build-essential
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: GCC ${{ matrix.sanitizer }} sanitizer
+        run: v -cc gcc -cflags -fsanitize=${{ matrix.sanitizer }} .
+
+  gcc-address-sanitizers:
+    needs: different-compilers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dependent-sanitizer: [null, pointer-compare, pointer-subtract ]
+    steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
+
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Set up GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install --quiet -y build-essential
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: GCC address sanitizer ${{ matrix.dependent-sanitizer }}
+        run: v -cc gcc -cflags -fsanitize=address -cflags -fsanitize-address-use-after-scope -cflags -fsanitize=${{ matrix.dependent-sanitizer }} .
+
+  gcc-undefined-sanitizers:
+    needs: different-compilers
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dependent-sanitizer: [null, shift, shift-exponent, shift-base, integer-divide-by-zero, unreachable, vla-bound, 'null', return, signed-integer-overflow, bounds, bounds-strict, alignment, object-size, float-divide-by-zero, float-cast-overflow, nonnull-attribute, returns-nonnull-attribute, bool, enum, vptr, pointer-overflow, builtin ]
+    steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
+
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Set up GCC
+        run: |
+          sudo apt-get update
+          sudo apt-get install --quiet -y build-essential
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: GCC undefined sanitizer ${{ matrix.dependent-sanitizer }}
+        run: v -cc gcc -cflags -fsanitize=undefined -cflags -fsanitize=${{ matrix.dependent-sanitizer }} .
