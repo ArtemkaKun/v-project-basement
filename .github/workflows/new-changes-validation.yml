@@ -124,19 +124,22 @@ jobs:
         with:
           version: 'weekly.2023.08'
 
-      - name: Set up GCC
+      - if: ${{ matrix.compiler == 'gcc' }}
+        name: Set up GCC
         run: |
           sudo apt-get update
           sudo apt-get install --quiet -y build-essential
 
-      - name: Restore LLVM and Clang
+      - if: ${{ matrix.compiler == 'clang' }}
+        name: Restore LLVM and Clang
         uses: actions/cache/restore@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/llvm
           key: llvm-15
           fail-on-cache-miss: true
 
-      - name: Setup LLVM and Clang
+      - if: ${{ matrix.compiler == 'clang' }}
+        name: Setup LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: '15'
