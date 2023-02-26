@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  cache-dependencies:
+  cache-V:
     runs-on: ubuntu-latest
     steps:
       - name: Check if V is cached
@@ -30,28 +30,8 @@ jobs:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
-      - name: Check if LLVM and Clang is cached
-        id: check-llvm-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
-          key: llvm-15
-
-      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
-        name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: '15'
-
-      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
-        name: Cache LLVM and Clang
-        uses: actions/cache/save@v3
-        with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
-          key: llvm-15
-
   simple-build:
-    needs: cache-dependencies
+    needs: cache-V
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -98,8 +78,32 @@ jobs:
       - name: Run tests
         run: v test .
 
+  cache-clang:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if LLVM and Clang is cached
+        id: check-llvm-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          key: llvm-15
+
+      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
+        name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: '15'
+
+      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
+        name: Cache LLVM and Clang
+        uses: actions/cache/save@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          key: llvm-15
+
   different-compilers:
-    needs: test
+    needs: cache-clang
     runs-on: ubuntu-latest
     strategy:
       matrix:
