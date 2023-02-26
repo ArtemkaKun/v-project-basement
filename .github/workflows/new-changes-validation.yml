@@ -56,7 +56,7 @@ jobs:
       - name: ${{ matrix.trimming }} ${{ matrix.memory-management }} build
         run: v ${{ matrix.trimming }} ${{ matrix.memory-management }} .
 
-  test:
+  tests:
     needs: simple-build
     runs-on: ubuntu-latest
     steps:
