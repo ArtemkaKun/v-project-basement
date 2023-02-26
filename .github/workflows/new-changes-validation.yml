@@ -10,23 +10,41 @@ jobs:
   cache-dependencies:
     runs-on: ubuntu-latest
     steps:
-      - name: Install V
+      - name: Check if V is cached
+        id: check-v-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+
+      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
+        name: Install V
         uses: vlang/setup-v@v1.3
         with:
           version: 'weekly.2023.08'
 
-      - name: Cache Vlang
+      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
+        name: Cache Vlang
         uses: actions/cache/save@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/vlang/
           key: vlang-0.3.3-weekly.2023.08
 
-      - name: Install LLVM and Clang
+      - name: Check if LLVM and Clang is cached
+        id: check-llvm-cache
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          key: llvm-15
+
+      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
+        name: Install LLVM and Clang
         uses: KyleMayes/install-llvm-action@v1
         with:
           version: '15'
 
-      - name: Cache LLVM and Clang
+      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
+        name: Cache LLVM and Clang
         uses: actions/cache/save@v3
         with:
           path: /home/runner/work/v-project-basement/v-project-basement/llvm
