@@ -341,7 +341,7 @@ jobs:
         run: v -os windows .
 
   check-formatting:
-    needs: linux-to-other-platforms-compilation
+    needs: [vab-compilation, linux-to-other-platforms-compilation]
     runs-on: ubuntu-latest
     steps:
       - name: Restore Vlang
