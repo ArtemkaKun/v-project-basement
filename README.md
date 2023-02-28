@@ -122,7 +122,8 @@ graph TD
 
 ## How to use it in my project?
 
-Just copy-paste the `.github` folder to your V project.
+1. Copy-paste the `.github` folder to your V project.
+2. Go to the `.github` folder and remove `FUNDING.yml` file.
 
 # Why?
 
