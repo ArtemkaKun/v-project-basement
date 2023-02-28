@@ -100,6 +100,7 @@ graph TD
 - [ ] Fuzzer testing
 - [ ] Linux to macOS cross compilation
 - [ ] Windows to other platforms cross compilation
+- [ ] macOS to other platforms cross compilation
 
 ### Issue templates
 
