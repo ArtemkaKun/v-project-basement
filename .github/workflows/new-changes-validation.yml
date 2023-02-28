@@ -300,6 +300,7 @@ jobs:
           sdk-version: 31
           build-tools-version: '33.0.2'
           ndk-version: '25.2.9519653'
+          cache-disabled: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
