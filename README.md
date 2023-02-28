@@ -99,7 +99,7 @@ graph TD
 - [ ] Valgrind check
 - [ ] Fuzzer testing
 - [ ] Linux to macOS cross compilation
-- [ ] Windows to macOS cross compilation
+- [ ] Windows to other platforms cross compilation
 
 ### Issue templates
 
