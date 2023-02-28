@@ -3,7 +3,7 @@
 This repo contains universal minimum GitHub CI scripts and issue templates for V project. After small modifications (specific to your project) you end up with "must-have" CI checks for commits/PRs and nice bug/feature request templates. You will spend no time on DevOps stuff and rush directly into the development process.
 
 > **Note**
-> 
+>
 > I recommend using this basement for every V project, that will be stored on GitHub.
 
 ## Details
@@ -62,13 +62,13 @@ graph TD
 		  windows_out[Windows]
       macos_out[macOS]
     end
-    
+
     linux_base --> windows_out
     linux_base -.-> |only with native backend|macos_out
-    
+
     windows_base --> linux_out
     windows_base -.-> |only with native backend|macos_out
-    
+
     macos_base --> windows_out
     macos_base --> linux_out
 	end
@@ -77,13 +77,13 @@ graph TD
 	style parallel_exec2 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
 	style parallel_exec3 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
 	style parallel_exec4 stroke:blue,stroke-width:2px,stroke-dasharray: 5 5
-  
+
 	style all_success1 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 	style all_success2 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 	style all_success3 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 	style all_success4 stroke:green,stroke-width:2px,stroke-dasharray: 5 5
 
-	start_node((Start)) 
+	start_node((Start))
 	--> Simple_build_step
 	--> tests_node[Tests]
 	--> Different_compilers_step
@@ -98,6 +98,8 @@ graph TD
 #### TODO
 - [ ] Valgrind check
 - [ ] Fuzzer testing
+- [ ] Linux to macOS cross compilation
+- [ ] Windows to macOS cross compilation
 
 ### Issue templates
 
