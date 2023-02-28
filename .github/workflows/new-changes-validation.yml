@@ -312,3 +312,30 @@ jobs:
 
       - name: Build APK
         run: vab --min-sdk-version 26 --api 31 --archs 'arm64-v8a' -v 3 .
+
+  linux-to-other-platforms-compilation:
+    needs: [clang-sanitizers, gcc-sanitizers, gcc-address-sanitizers, gcc-undefined-sanitizers]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
+
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Install MinGW-w64
+        run: |
+          sudo apt-get update
+          sudo apt-get install --quiet -y gcc-mingw-w64-x86-64
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: Build Windows executable
+        run: v -os windows .
