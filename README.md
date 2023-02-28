@@ -95,6 +95,10 @@ graph TD
 	--> end_node((End))
 ```
 
+#### TODO
+- [ ] Valgrind check
+- [ ] Fuzzer testing
+
 ### Issue templates
 
 #### `Bug` issue template
