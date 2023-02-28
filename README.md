@@ -149,3 +149,8 @@ but it's very clear when you have limited self-hosted runners.
 
 - V community - for cool programming language and CI scripts
 - @ulises-jeremias for issue templates
+
+# Donations
+
+If you like this project, please consider donating to me or the V language project.
+Your donations will help me to continue to develop this project and the V language.
