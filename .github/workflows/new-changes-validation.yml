@@ -339,3 +339,25 @@ jobs:
 
       - name: Build Windows executable
         run: v -os windows .
+
+  check-formatting:
+    needs: linux-to-other-platforms-compilation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          key: vlang-0.3.3-weekly.2023.08
+          fail-on-cache-miss: true
+
+      - name: Install V
+        uses: vlang/setup-v@v1.3
+        with:
+          version: 'weekly.2023.08'
+
+      - name: Checkout ${{ github.event.repository.name }}
+        uses: actions/checkout@v3
+
+      - name: Check formatting
+        run: v fmt -verify .
