@@ -6,6 +6,9 @@ on:
       - 'main'
   pull_request:
 
+env:
+  WORK_PATH: /home/runner/work/v-project-basement/v-project-basement/
+
 jobs:
   cache-V:
     runs-on: ubuntu-latest
@@ -14,7 +17,7 @@ jobs:
         id: check-v-cache
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
 
       - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
@@ -27,7 +30,7 @@ jobs:
         name: Cache Vlang
         uses: actions/cache/save@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
 
   simple-build:
@@ -41,7 +44,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -63,7 +66,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -86,7 +89,7 @@ jobs:
         id: check-llvm-cache
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          path: ${{ env.WORK_PATH }}llvm
           key: llvm-15
 
       - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
@@ -99,7 +102,7 @@ jobs:
         name: Cache LLVM and Clang
         uses: actions/cache/save@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          path: ${{ env.WORK_PATH }}llvm
           key: llvm-15
 
   different-compilers:
@@ -115,7 +118,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -134,7 +137,7 @@ jobs:
         name: Restore LLVM and Clang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          path: ${{ env.WORK_PATH }}llvm
           key: llvm-15
           fail-on-cache-miss: true
 
@@ -161,7 +164,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -173,7 +176,7 @@ jobs:
       - name: Restore LLVM and Clang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/llvm
+          path: ${{ env.WORK_PATH }}llvm
           key: llvm-15
           fail-on-cache-miss: true
 
@@ -199,7 +202,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -226,7 +229,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -253,7 +256,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -280,7 +283,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -321,7 +324,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -348,7 +351,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -370,7 +373,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
@@ -395,7 +398,7 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: /home/runner/work/v-project-basement/v-project-basement/vlang/
+          path: ${{ env.WORK_PATH }}vlang/
           key: vlang-0.3.3-weekly.2023.08
           fail-on-cache-miss: true
 
