@@ -9,11 +9,11 @@ on:
 env:
   WORK_PATH: /home/runner/work/v-project-basement/v-project-basement/
 
+jobs:
 # Because of problems with `setup-v` action, when Vlang version is specified, and also because of V evolving continuously,
 # and you need the latest commit of V most of the time, we always use the latest V version from the master branch and caching of it is not possible (because you need to know a version of V to cache it).
 # This job should be uncommented when Vlang will be stable and caching will be possible.
 #
-#jobs:
 #  cache-V:
 #    runs-on: ubuntu-latest
 #    steps:
