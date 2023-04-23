@@ -31,7 +31,7 @@ jobs:
           check-latest: true
 
       - name: Set V_VERSION environment variable
-        run: echo "V_VERSION=${{ steps.install-v.outputs.version }}" >> $GITHUB_ENV
+        run: echo "V_VERSION=$(v -v)" >> $GITHUB_ENV
 
       - name: Cache Vlang
         uses: actions/cache/save@v3
