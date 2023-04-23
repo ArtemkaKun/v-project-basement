@@ -125,7 +125,7 @@ graph TD
 1. Copy-paste the `.github` folder to your V project.
 2. Go to the `.github` folder and remove `FUNDING.yml` file.
 3. Go to the `github/workflows` folder and edit `new-changes-validation.yml` file -
-replace all `v-project-basement` with the name of your project.
+replace `v-project-basement` in the `WORK_PATH` environment variable with the name of your project `/home/runner/work/<project-name>/<project-name>/`.
 
 # Why?
 
