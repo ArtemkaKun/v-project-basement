@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  WORK_PATH: /home/runner/work/v-project-basement/v-project-basement/
+  WORK_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/
 
 jobs:
 # Because of problems with `setup-v` action, when Vlang version is specified, and also because of V evolving continuously,
