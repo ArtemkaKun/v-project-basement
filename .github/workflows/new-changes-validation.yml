@@ -7,31 +7,37 @@ on:
   pull_request:
 
 env:
-  WORK_PATH: /home/runner/work/v-project-basement/v-project-basement/
+  WORK_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/
 
 jobs:
   cache-V:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if V is cached
-        id: check-v-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+      # Because of problems with `setup-v` action, when Vlang version is specified, and also because of V evolving continuously,
+      # and you need the latest commit of V most of the time, we always use the latest V version from the master branch
+      # and getting it from the cache on the start of a job is not possible (because you need to know a version of V to cache it).
+      # This step should be uncommented when Vlang will be stable and caching will be possible.
+#      - name: Check if V is cached
+#        id: check-v-cache
+#        uses: actions/cache/restore@v3
+#        with:
+#          path: ${{ env.WORK_PATH }}vlang/
+#          key: vlang-0.3.3-weekly.2023.08
 
-      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
-        name: Install V
+      - name: Install V
+        id: install-v
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
-      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
-        name: Cache Vlang
+      - name: Set V_VERSION environment variable
+        run: echo "V_VERSION=$(v -v)" >> $GITHUB_ENV
+
+      - name: Cache Vlang
         uses: actions/cache/save@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
 
   simple-build:
     needs: cache-V
@@ -45,13 +51,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -67,13 +73,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -119,13 +125,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - if: ${{ matrix.compiler == 'gcc' }}
         name: Set up GCC
@@ -165,13 +171,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Restore LLVM and Clang
         uses: actions/cache/restore@v3
@@ -203,13 +209,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Set up GCC
         run: |
@@ -230,13 +236,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Set up GCC
         run: |
@@ -257,13 +263,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Set up GCC
         run: |
@@ -284,13 +290,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - uses: actions/setup-java@v3
         with:
@@ -325,13 +331,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Install MinGW-w64
         run: |
@@ -352,13 +358,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -374,13 +380,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -399,13 +405,13 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-0.3.3-weekly.2023.08
+          key: vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
-          version: 'weekly.2023.08'
+          check-latest: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
