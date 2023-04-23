@@ -10,41 +10,50 @@ env:
   WORK_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/
 
 jobs:
-# Because of problems with `setup-v` action, when Vlang version is specified, and also because of V evolving continuously,
-# and you need the latest commit of V most of the time, we always use the latest V version from the master branch and caching of it is not possible (because you need to know a version of V to cache it).
-# This job should be uncommented when Vlang will be stable and caching will be possible.
-#
-#  cache-V:
-#    runs-on: ubuntu-latest
-#    steps:
+  cache-V:
+    runs-on: ubuntu-latest
+    steps:
+      # Because of problems with `setup-v` action, when Vlang version is specified, and also because of V evolving continuously,
+      # and you need the latest commit of V most of the time, we always use the latest V version from the master branch
+      # and getting it from the cache on the start of a job is not possible (because you need to know a version of V to cache it).
+      # This step should be uncommented when Vlang will be stable and caching will be possible.
 #      - name: Check if V is cached
 #        id: check-v-cache
 #        uses: actions/cache/restore@v3
 #        with:
 #          path: ${{ env.WORK_PATH }}vlang/
 #          key: vlang-0.3.3-weekly.2023.08
-#
-#      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
-#        name: Install V
-#        uses: vlang/setup-v@v1.3
-#        with:
-#          version: 'weekly.2023.08'
-#
-#      - if: ${{ steps.check-v-cache.outputs.cache-hit != 'true' }}
-#        name: Cache Vlang
-#        uses: actions/cache/save@v3
-#        with:
-#          path: ${{ env.WORK_PATH }}vlang/
-#          key: vlang-0.3.3-weekly.2023.08
+
+      - name: Install V
+        id: install-v
+        uses: vlang/setup-v@v1.3
+        with:
+          check-latest: true
+
+      - name: Set V_VERSION environment variable
+        run: echo "V_VERSION=${{ steps.install-v.outputs.version }}" >> $GITHUB_ENV
+
+      - name: Cache Vlang
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
 
   simple-build:
-#    needs: cache-V
+    needs: cache-V
     runs-on: ubuntu-latest
     strategy:
       matrix:
         trimming: [ null , -skip-unused ]
         memory-management: [ null , -autofree ]
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -60,6 +69,13 @@ jobs:
     needs: simple-build
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -105,6 +121,13 @@ jobs:
         memory-management: [ null , -autofree ]
         optimization: [ null , -prod ]
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -144,6 +167,13 @@ jobs:
       matrix:
         sanitizer: [ address, memory, undefined, leak ] # TODO: thread sanitizer was removed due to strange warnings. It should be fixed and turned on.
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -175,6 +205,13 @@ jobs:
       matrix:
         sanitizer: [ leak ]  # TODO: thread sanitizer was removed due to strange warnings. It should be fixed and turned on.
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -195,6 +232,13 @@ jobs:
     needs: different-compilers
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -215,6 +259,13 @@ jobs:
     needs: different-compilers
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -235,6 +286,13 @@ jobs:
     needs: [clang-sanitizers, gcc-sanitizers, gcc-address-sanitizers, gcc-undefined-sanitizers]
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -269,6 +327,13 @@ jobs:
     needs: [clang-sanitizers, gcc-sanitizers, gcc-address-sanitizers, gcc-undefined-sanitizers]
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -289,6 +354,13 @@ jobs:
     needs: [vab-compilation, linux-to-other-platforms-compilation]
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -304,6 +376,13 @@ jobs:
     needs: [vab-compilation, linux-to-other-platforms-compilation]
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
@@ -322,6 +401,13 @@ jobs:
     needs: [vab-compilation, linux-to-other-platforms-compilation]
     runs-on: ubuntu-latest
     steps:
+      - name: Restore Vlang
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ env.WORK_PATH }}vlang/
+          key: vlang-${{ V_VERSION }}
+          fail-on-cache-miss: true
+
       - name: Install V
         uses: vlang/setup-v@v1.3
         with:
