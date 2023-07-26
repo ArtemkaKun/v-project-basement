@@ -112,7 +112,7 @@ jobs:
           key: llvm-15
 
   different-compilers:
-    needs: cache-clang
+    needs: tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -132,27 +132,6 @@ jobs:
         uses: vlang/setup-v@v1.3
         with:
           check-latest: true
-
-      - if: ${{ matrix.compiler == 'gcc' }}
-        name: Set up GCC
-        run: |
-          sudo apt-get update
-          sudo apt-get install --quiet -y build-essential
-
-      - if: ${{ matrix.compiler == 'clang' }}
-        name: Restore LLVM and Clang
-        uses: actions/cache/restore@v3
-        with:
-          path: ${{ env.WORK_PATH }}llvm
-          key: llvm-15
-          fail-on-cache-miss: true
-
-      - if: ${{ matrix.compiler == 'clang' }}
-        name: Setup LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: '15'
-          cached: true
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
@@ -179,19 +158,6 @@ jobs:
         with:
           check-latest: true
 
-      - name: Restore LLVM and Clang
-        uses: actions/cache/restore@v3
-        with:
-          path: ${{ env.WORK_PATH }}llvm
-          key: llvm-15
-          fail-on-cache-miss: true
-
-      - name: Setup LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: '15'
-          cached: true
-
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
 
@@ -217,11 +183,6 @@ jobs:
         with:
           check-latest: true
 
-      - name: Set up GCC
-        run: |
-          sudo apt-get update
-          sudo apt-get install --quiet -y build-essential
-
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
 
@@ -244,11 +205,6 @@ jobs:
         with:
           check-latest: true
 
-      - name: Set up GCC
-        run: |
-          sudo apt-get update
-          sudo apt-get install --quiet -y build-essential
-
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
 
@@ -270,11 +226,6 @@ jobs:
         uses: vlang/setup-v@v1.3
         with:
           check-latest: true
-
-      - name: Set up GCC
-        run: |
-          sudo apt-get update
-          sudo apt-get install --quiet -y build-essential
 
       - name: Checkout ${{ github.event.repository.name }}
         uses: actions/checkout@v3
