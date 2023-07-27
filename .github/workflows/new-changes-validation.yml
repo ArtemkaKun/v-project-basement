@@ -6,9 +6,6 @@ on:
       - 'main'
   pull_request:
 
-env:
-  WORK_PATH: /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/
-
 jobs:
   cache-V:
     runs-on: ubuntu-latest
@@ -17,12 +14,12 @@ jobs:
       # and you need the latest commit of V most of the time, we always use the latest V version from the master branch
       # and getting it from the cache on the start of a job is not possible (because you need to know a version of V to cache it).
       # This step should be uncommented when Vlang will be stable and caching will be possible.
-#      - name: Check if V is cached
-#        id: check-v-cache
-#        uses: actions/cache/restore@v3
-#        with:
-#          path: ${{ env.WORK_PATH }}vlang/
-#          key: vlang-0.3.3-weekly.2023.08
+      # - name: Check if V is cached
+      #   id: check-v-cache
+      #   uses: actions/cache/restore@v3
+      #   with:
+      #     path: vlang
+      #     key: vlang-0.3.3-weekly.2023.08
 
       - name: Install V
         id: install-v
@@ -36,8 +33,8 @@ jobs:
       - name: Cache Vlang
         uses: actions/cache/save@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
 
   simple-build:
     needs: cache-V
@@ -50,8 +47,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -72,8 +69,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -100,8 +97,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -125,8 +122,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -150,8 +147,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -172,8 +169,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -194,8 +191,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -210,14 +207,14 @@ jobs:
         run: v -cc gcc -cflags -fsanitize=undefined -cflags -fsanitize=shift -cflags -fsanitize=shift-exponent -cflags -fsanitize=shift-base -cflags -fsanitize=integer-divide-by-zero -cflags -fsanitize=unreachable -cflags -fsanitize=vla-bound -cflags -fsanitize=null -cflags -fsanitize=return -cflags -fsanitize=signed-integer-overflow -cflags -fsanitize=bounds -cflags -fsanitize=bounds-strict -cflags -fsanitize=alignment -cflags -fsanitize=object-size -cflags -fsanitize=float-divide-by-zero -cflags -fsanitize=float-cast-overflow -cflags -fsanitize=nonnull-attribute -cflags -fsanitize=returns-nonnull-attribute -cflags -fsanitize=bool -cflags -fsanitize=enum -cflags -fsanitize=vptr -cflags -fsanitize=pointer-overflow -cflags -fsanitize=builtin test .
 
   vab-compilation:
-    needs: [clang-sanitizers, gcc-sanitizers, gcc-address-sanitizers, gcc-undefined-sanitizers]
+    needs: [ clang-sanitizers, gcc-sanitizers, gcc-address-sanitizers, gcc-undefined-sanitizers ]
     runs-on: ubuntu-latest
     steps:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -257,8 +254,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -284,8 +281,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -306,8 +303,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
@@ -331,8 +328,8 @@ jobs:
       - name: Restore Vlang
         uses: actions/cache/restore@v3
         with:
-          path: ${{ env.WORK_PATH }}vlang/
-          key: vlang-${{ env.V_VERSION }}
+          path: vlang
+          key: ${{ runner.os }}-vlang-${{ env.V_VERSION }}
           fail-on-cache-miss: true
 
       - name: Install V
