@@ -87,30 +87,6 @@ jobs:
       - name: Run tests
         run: v test .
 
-  cache-clang:
-    needs: tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check if LLVM and Clang is cached
-        id: check-llvm-cache
-        uses: actions/cache/restore@v3
-        with:
-          path: ${{ env.WORK_PATH }}llvm
-          key: llvm-15
-
-      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
-        name: Install LLVM and Clang
-        uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: '15'
-
-      - if: ${{ steps.check-llvm-cache.outputs.cache-hit != 'true' }}
-        name: Cache LLVM and Clang
-        uses: actions/cache/save@v3
-        with:
-          path: ${{ env.WORK_PATH }}llvm
-          key: llvm-15
-
   different-compilers:
     needs: tests
     runs-on: ubuntu-latest
