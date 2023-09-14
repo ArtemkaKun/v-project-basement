@@ -16,8 +16,7 @@ jobs:
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
-            
-            > **Note**
+            > [!IMPORTANT]
             > You can vote for this issue using the 👍 reaction. More votes increase the issue's priority
             > for developers.
             >
